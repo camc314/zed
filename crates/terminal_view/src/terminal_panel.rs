@@ -20,7 +20,7 @@ use itertools::Itertools;
 use project::{terminals::TerminalKind, Fs, Project, ProjectEntryId};
 use search::{buffer_search::DivRegistrar, BufferSearchBar};
 use settings::Settings;
-use task::{RevealStrategy, Shell, SpawnInTerminal, TaskId};
+use task::{RevealStrategy, RevealTarget, Shell, SpawnInTerminal, TaskId};
 use terminal::{
     terminal_settings::{TerminalDockPosition, TerminalSettings},
     Terminal,
@@ -620,7 +620,10 @@ impl TerminalPanel {
         cx: &mut ViewContext<Self>,
     ) -> Task<Result<Model<Terminal>>> {
         let reveal = spawn_task.reveal;
-        self.add_terminal(TerminalKind::Task(spawn_task), reveal, cx)
+        match spawn_task.reveal_target {
+            RevealTarget::Center => todo!("TODO kb"),
+            RevealTarget::Dock => self.add_terminal(TerminalKind::Task(spawn_task), reveal, cx),
+        }
     }
 
     /// Create a new Terminal in the current working directory or the user's home directory
@@ -647,6 +650,8 @@ impl TerminalPanel {
         label: &str,
         cx: &mut AppContext,
     ) -> Vec<(usize, View<Pane>, View<TerminalView>)> {
+        // TODO kb add workspace center pane here items here, sort them by id
+        // but only for the rerun case we need both?
         self.center
             .panes()
             .into_iter()

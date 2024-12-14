@@ -16109,6 +16109,7 @@ name = "zed_actions"
 version = "0.1.0"
 dependencies = [
  "gpui",
+ "schemars",
  "serde",
 ]
 
